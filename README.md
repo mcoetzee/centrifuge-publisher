@@ -5,9 +5,9 @@ This is a Java client to publish messages to Centrifuge.
 Centrifuge is a self-hosted, open-source, real-time messaging server.
 > It is built on top of Tornado, an extremely fast and mature Python async web server. Centrifuge uses ZeroMQ steroid sockets for internal communication and publish/subscribe operations. For presence and history data Centrifuge utilizes Redis - advanced and super fast in memory key-value store. To connect to Centrifuge from browser pure Websockets or **SockJS** library can be used. 
 
-The technology stack looks great (which includes the same [SockJS](https://github.com/sockjs/sockjs-client) Javascript library as what [Pusher](http://www.pusher.com) uses). It provides a web interface for the admin to manage projects/namespaces and to publish messages to any channel (which will be nice way to publish system messages to everyone when you do a release). Centrifuge is being developed to be used in production. The main developer https://github.com/FZambia is active and is committing frequently and you can find the code here: https://github.com/FZambia/centrifuge
+The technology stack looks great, which includes the same [SockJS](https://github.com/sockjs/sockjs-client) Javascript library as what [Pusher](http://www.pusher.com) uses. It provides a web interface for the admin to manage projects/namespaces and to publish messages to any channel (which will be nice way to publish system messages to everyone when you do a release). Centrifuge is being developed to be used in production. The main developer https://github.com/FZambia is active and is committing frequently and you can find the code here: https://github.com/FZambia/centrifuge
 
-I have created this Java client which has been tested with version 0.3.7 of Centrifuge. Seeing as Centrifuge is still undergoing development, this client might need to be updated in the future.
+This Java client has been tested with version 0.3.7 of Centrifuge. Seeing as Centrifuge is still undergoing development, some updates might be required in the future in order for this client to work with the latest version of Centrifuge.
 
 To make use of this Java client you can add this Maven repository to your pom.xml:
 
@@ -55,9 +55,17 @@ To generate the user token to be provided when connecting to Centrifuge from the
 String userToken = centrifugeMessageEncoder.encodeMessage(Long.toString(user.getId()));
 ```
 
-To publish a message to the Centrifuge API:
+To publish a message to the public namespace:
 ```Java
-centrifugeMessagePublisher.publishPublicMessage(channel, messageObject);
+centrifugeMessagePublisher.publishPublicMessage(channel, message);
 ```
-Note that this `messageObject` will be serialized to JSON and its fields will need to have public access modifiers in order to be serialized and subsequently sent to the Centrifuge API.
+To publish a message to the private namespace:
+```Java
+centrifugeMessagePublisher.publishPrivateMessage(channel, message);
+```
+To publish a message to a custom namespace:
+```Java
+centrifugeMessagePublisher.publishMessage(namespace, channel, message);
+```
+Note that this `message` Object will be serialized to JSON and its fields will need to have public access modifiers in order to be serialized and subsequently sent to the Centrifuge API.
 
